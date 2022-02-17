@@ -1,2 +1,2 @@
-# TCS-Internship_Project
-Making videos searchable based on their content.
+# TCS-Internship-Project
+Objective : Making videos searchable based on their content.
