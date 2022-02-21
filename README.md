@@ -5,4 +5,5 @@
 > The library 'moviepy' has been used to extract audio file in .WAV format from video .MP4 file.
 > 
 > The library 'SpeechRecognition' has been used to transcribe the extracted audio .WAV file into TEXT using the Google Web Speech API (FREE).
-
+> 
+> 'YAKE or Yet Another Keyword Extractor' has been used to extract important keywords from the text transcript to tag the videos.
