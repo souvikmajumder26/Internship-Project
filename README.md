@@ -6,5 +6,7 @@
 > The library 'SpeechRecognition' has been used to transcribe the extracted audio .WAV file into TEXT using the Google Web Speech API (FREE).
 > 
 > Two different keywords extraction NLP models has been explored to extract important keywords from the text transcript to tag the videos.
-> - <a href="">RAKE</a>
-> - <a href="">YAKE</a>
+> - <a href="https://github.com/souvikmajumder26/Internship-Project/blob/main/keywords_from_video_RAKE.ipynb">RAKE</a>
+> - <a href="https://github.com/souvikmajumder26/Internship-Project/blob/main/keywords_from_video_YAKE.ipynb">YAKE</a>
+
+> To interact with the programs, click "Open in Colab" after opening a specific notebook in this GitHub repository.
