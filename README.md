@@ -6,4 +6,6 @@
 > 
 > The library 'SpeechRecognition' has been used to transcribe the extracted audio .WAV file into TEXT using the Google Web Speech API (FREE).
 > 
-> 'YAKE or Yet Another Keyword Extractor' has been used to extract important keywords from the text transcript to tag the videos.
+> Two different keywords extraction NLP models has been explored to extract important keywords from the text transcript to tag the videos.
+> - RAKE
+> - YAKE
