@@ -14,14 +14,20 @@
         <div style="width: 500px; margin: auto;">
 			<fieldset name="Video File Upload">
 				{% if msg %} {% autoescape off %} {{ msg }} {% endautoescape %} {% endif %}
-				<form method="post" action="" enctype="multipart/form-data">
+				<form method="post" action="/upload/" enctype="multipart/form-data">
 					{% csrf_token %}
-					<dl>
+					<fieldset>
 						<p>
 							<label>Browse and select a video file</label>&nbsp;&nbsp;
-							<input type="file" name="file" autocomplete="off" required>
+							<input type="file" name="video" autocomplete="off" >
 						</p>
-					</dl>
+						<br>
+						<p>
+							<input type="text" name="text" required>
+							<input type="just" name="just" required>
+							
+						</p>
+					</fieldset>
 					<p>
 						<input type="submit" value="Upload">
 					</p>
