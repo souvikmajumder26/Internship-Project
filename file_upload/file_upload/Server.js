@@ -38,9 +38,11 @@ app.get('/about',function(req,res){
 });
 app.get('/upload', function(req,res){
   res.sendFile(__dirname+'/upload.html') 
+
 });
 app.get('/search', function(req,res){
   res.sendFile(__dirname+'/search.html')
+  //res.render('search.html')
 });
 
 app.post('/search',async function(req,res){
@@ -59,9 +61,15 @@ app.post('/search',async function(req,res){
   //res.send(keyword);
   const keyword=req.body.key;
   console.log(keyword);
-  const data= await save_file.find({caption:keyword})
-  console.log(data[0].path);
+  const data= await save_file.find({keyword:keyword})
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i].path);
+  }
   console.log(data);
+  console.log(typeof data);
+  //const t=data[0].path;
+  //res.redirect('/video.html', {name:t});
+
   //res.send(path);
   //res.sendFile(__dirname+'/video.html')
   /*const stat = fs.statSync(path)
@@ -108,8 +116,31 @@ app.post('/upload',  function(req,res){
     //console.log(det);
     const path= req.file.path;
     console.log(path);
-    var keyword={'key':'ans','key':'ques'};
-    await save_file.create({path,caption,keyword});
+    function convertToText(path) {
+      var spawn = require('child_process').spawn;
+      const scriptExecution = spawn("python", ["keywords_extract_rake.py", path])
+      var keyword=[]
+      scriptExecution.stdout.on('data',async function (data) {
+      data=data.toString();
+      data=data.slice(2,-4);
+      console.log(data);
+      const array = data.split("\', \'");
+      for (let i = 0; i < array.length; i++) {
+        keyword.push(array[i]);
+      }
+      console.log(keyword);
+      await save_file.create({path,caption,keyword});
+      //return keyword;
+    });
+    
+    return keyword;
+  }
+    var keyword=convertToText(path);
+    //convertToText(path);
+    //var keyword=['ans','ques'];
+    
+    keyword.push(caption);
+    
     
     //alert("File is uploaded successfully!");
 		//res.end("File is uploaded successfully!");
