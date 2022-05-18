@@ -29,7 +29,7 @@ with audio_file as source:
 
 # Extracting keywords from the text file
 text_list = [text_result]
-r = Rake(max_length = 3)
+r = Rake(max_length = 2)
 r.extract_keywords_from_sentences(text_list)
 output_keywords = r.get_ranked_phrases()
 print(output_keywords)

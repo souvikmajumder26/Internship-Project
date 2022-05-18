@@ -6,6 +6,12 @@ const mongoose = require('mongoose');
 const save_file= require('./Models/file');
 var app	=	express();
 var fs = require('fs');
+app.use(express.static(__dirname + '/'));
+app.use(bodyParser.urlencoded({extend:true}));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname);
+app.use(bodyParser.urlencoded({extended:true}));
 
 dotenv.config();
 mongoose.connect(process.env.DB_CONNECTION, {
@@ -25,54 +31,39 @@ var storage	=	multer.diskStorage({
 });
 var upload = multer({ storage : storage}).single('files');
 console.log(upload);
-app.use(bodyParser.urlencoded({extended:true}));
 
-app.get('/',function(req,res){
-  res.sendFile(__dirname + "/home.html");
+var pat="nothing";
+
+app.get('/index',function(req,res){
+  //res.sendFile(__dirname + "/home.html");
+  res.render("index.html");
 });
 app.get('/home',function(req,res){
-  res.sendFile(__dirname + "/home.html");
+  //res.sendFile(__dirname + "/home.html");
+  res.render("home.html");
 });
 app.get('/about',function(req,res){
-  res.sendFile(__dirname + "/about.html");
+  //res.sendFile(__dirname + "/about.html");
+  res.render("about.html");
 });
 app.get('/upload', function(req,res){
-  res.sendFile(__dirname+'/upload.html') 
+  //res.sendFile(__dirname+'/upload.html') 
+  res.render("upload.html");
 
 });
 app.get('/search', function(req,res){
-  res.sendFile(__dirname+'/search.html')
-  //res.render('search.html')
+  //res.sendFile(__dirname+'/search.html')
+  res.render("search.html");
 });
-
-app.post('/search',async function(req,res){
-  /*search(req,res,async function(err) {
-		if(err) {
-      console.log(err);
-			return res.end("Error searching file.");
-		}
-    const keyword= req.body.caption;
-    console.log(keyword);
-
-    const data= await save_file.find({caption:keyword});
-    res.send(data);
-	});*/
-  //const keyword= req.body.key;
-  //res.send(keyword);
-  const keyword=req.body.key;
-  console.log(keyword);
-  const data= await save_file.find({keyword:keyword})
-  for (let i = 0; i < data.length; i++) {
-    console.log(data[i].path);
-  }
-  console.log(data);
-  console.log(typeof data);
-  //const t=data[0].path;
-  //res.redirect('/video.html', {name:t});
-
-  //res.send(path);
-  //res.sendFile(__dirname+'/video.html')
-  /*const stat = fs.statSync(path)
+app.get('/write', function(req,res){
+  //res.sendFile(__dirname+'/search.html')
+  res.render("write.html",{name:''});
+});
+app.use('/video', function(req,res,next){
+  const path=pat;
+  
+  //res.render('video.html')
+  const stat = fs.statSync(path)
   const fileSize = stat.size
   const range = req.headers.range
   if (range) {
@@ -98,12 +89,52 @@ app.post('/search',async function(req,res){
     }
     res.writeHead(200, head)
     fs.createReadStream(path).pipe(res)
-  }*/
+  }
+});
+
+
+app.post('/search',async function(req,res){
+  /*search(req,res,async function(err) {
+		if(err) {
+      console.log(err);
+			return res.end("Error searching file.");
+		}
+    const keyword= req.body.caption;
+    console.log(keyword);
+
+    const data= await save_file.find({caption:keyword});
+    res.send(data);
+	});*/
+  //const keyword= req.body.key;
+  //res.send(keyword);
+  const keyword=req.body.key;
+  console.log(keyword);
+  const data= await save_file.find({keyword:keyword})
+  var pt=[]
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i].path);
+    pt.push(data[i].path)
+  }
+  console.log(data);
+  console.log(typeof data);
+  //res.redirect('/home');
+  
+  if(data.length==0)
+  {
+    //res.send("No such tag or caption is present")
+    res.render("write.html",{name:'No such tag or caption is present'});
+  }
+  else{pat=data[0].path;
+    res.redirect('/video');}
+
+  //res.send(path);
+  //res.sendFile(__dirname+'/video.html')
+  /**/
 });
 
 
 
-app.post('/upload',  function(req,res){ 
+app.post('/upload',  function(req,res){
 	upload(req,res,async function(err) {
 		if(err) {
       console.log(err);
@@ -116,10 +147,11 @@ app.post('/upload',  function(req,res){
     //console.log(det);
     const path= req.file.path;
     console.log(path);
-    function convertToText(path) {
+    function convertToText(path,caption) {
       var spawn = require('child_process').spawn;
       const scriptExecution = spawn("python", ["keywords_extract_rake.py", path])
       var keyword=[]
+      keyword.push(caption);
       scriptExecution.stdout.on('data',async function (data) {
       data=data.toString();
       data=data.slice(2,-4);
@@ -130,20 +162,24 @@ app.post('/upload',  function(req,res){
       }
       console.log(keyword);
       await save_file.create({path,caption,keyword});
+      //res.redirect('/home');
+      //res.send("File uploaded succsessfully");
+      res.render("write.html",{name:'File uploaded succsessfully'});
+      //res.render()
       //return keyword;
     });
     
-    return keyword;
+    //return keyword;
   }
-    var keyword=convertToText(path);
-    //convertToText(path);
+    //var keyword=convertToText(path);
+    convertToText(path,caption);
     //var keyword=['ans','ques'];
     
-    keyword.push(caption);
+    //keyword.push(caption);
     
     
     //alert("File is uploaded successfully!");
-		//res.end("File is uploaded successfully!");
+		//res.end();
     
 	});
 });
