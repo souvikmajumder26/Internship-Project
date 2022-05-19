@@ -59,6 +59,10 @@ app.get('/write', function(req,res){
   //res.sendFile(__dirname+'/search.html')
   res.render("write.html",{name:''});
 });
+/*app.use('/mid', function(req,res){
+  //res.sendFile(__dirname+'/search.html')
+  res.render("mid.html",{name:''});
+});*/
 app.use('/video', function(req,res,next){
   const path=pat;
   
@@ -124,6 +128,48 @@ app.post('/search',async function(req,res){
     //res.send("No such tag or caption is present")
     res.render("write.html",{name:'No such tag or caption is present'});
   }
+  else{
+    pat=data[0].path;
+    res.redirect('/video');
+  //res.render('/mid.html',{name:data[0].path,name1:data[1].path})
+  }
+
+  //res.send(path);
+  //res.sendFile(__dirname+'/video.html')
+  /**/
+});
+
+app.post('/index',async function(req,res){
+  /*search(req,res,async function(err) {
+		if(err) {
+      console.log(err);
+			return res.end("Error searching file.");
+		}
+    const keyword= req.body.caption;
+    console.log(keyword);
+
+    const data= await save_file.find({caption:keyword});
+    res.send(data);
+	});*/
+  //const keyword= req.body.key;
+  //res.send(keyword);
+  const keyword=req.body.key;
+  console.log(keyword);
+  const data= await save_file.find({keyword:keyword})
+  var pt=[]
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i].path);
+    pt.push(data[i].path)
+  }
+  console.log(data);
+  console.log(typeof data);
+  //res.redirect('/home');
+  
+  if(data.length==0)
+  {
+    //res.send("No such tag or caption is present")
+    res.render("write.html",{name:'No such tag or caption is present'});
+  }
   else{pat=data[0].path;
     res.redirect('/video');}
 
@@ -131,7 +177,6 @@ app.post('/search',async function(req,res){
   //res.sendFile(__dirname+'/video.html')
   /**/
 });
-
 
 
 app.post('/upload',  function(req,res){
