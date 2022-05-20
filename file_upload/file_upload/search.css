@@ -1,0 +1,13 @@
+body {
+    font-family: lato;
+    margin: 0;
+    background: #e6dafe;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+}
+  
+  html {
+    box-sizing: border-box;
+  }
+  

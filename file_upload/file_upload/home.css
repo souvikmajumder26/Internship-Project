@@ -1,0 +1,28 @@
+a {
+    text-decoration: none;
+    color: #922c8d;
+  }
+  
+  a:hover {
+    color: #771f70;
+    text-decoration: none;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: lato;
+    
+  }
+
+  body, html {
+    height: 100%;
+    background-image: url('/homebg.png');
+    transform: rotate(180deg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: lato;
+  justify-content: center;
+  }
+ 
+  
+  
